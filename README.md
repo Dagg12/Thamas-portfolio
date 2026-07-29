@@ -17,8 +17,7 @@ The site is designed to build trust and demonstrate our capabilities through rea
 ## 🚀 Live Demo
 
 **GitHub Pages URL:**  
-[https://dagg12.github.io/Thamas-portfolio-/](https://dagg12.github.io/Thamas-portfolio-/)
-
+ https://dagg12.github.io/Thamas-portfolio/
 
 ---
 
