@@ -1,0 +1,2869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THAMAS TECH WORLD — Professional WiFi & Networking Solutions</title>
+
+    <!-- ============================================================
+    PRELOAD & FONTS
+    ============================================================ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- AOS (Animate On Scroll) -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+
+    <style>
+        /* ============================================================
+                   CSS VARIABLES & RESET
+                   ============================================================ */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #080b12;
+            --bg-secondary: #0d1420;
+            --bg-card: #111b2b;
+            --bg-card-hover: #182437;
+            --text-primary: #f0f6ff;
+            --text-secondary: #a8c0e0;
+            --text-muted: #5a7a9a;
+            --accent-gold: #d4a74a;
+            --accent-gold-light: #e8c97a;
+            --accent-gold-dark: #b8923a;
+            --accent-blue: #3d8fd9;
+            --accent-blue-glow: rgba(61, 143, 217, 0.15);
+            --border-color: #1e3050;
+            --glass-bg: rgba(13, 20, 32, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        ::selection {
+            background: var(--accent-gold);
+            color: #080b12;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        /* ============================================================
+                   SCROLLBAR
+                   ============================================================ */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold-dark);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold);
+        }
+
+        /* ============================================================
+                   PARTICLES CANVAS (background)
+                   ============================================================ */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ============================================================
+                   LOADING SCREEN
+                   ============================================================ */
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loader-ring {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--accent-gold);
+            border-bottom-color: var(--accent-blue);
+            animation: spin 1s linear infinite;
+            position: relative;
+        }
+        .loader-ring::after {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-left-color: var(--accent-gold-light);
+            animation: spin 0.6s linear infinite reverse;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .loader-text {
+            margin-top: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .loader-text span {
+            color: var(--accent-gold);
+        }
+
+        /* ============================================================
+                   HEADER / NAVIGATION (sticky glass)
+                   ============================================================ */
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 14px 0;
+            background: rgba(8, 11, 18, 0.7);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: var(--transition);
+        }
+        .site-header.scrolled {
+            background: rgba(8, 11, 18, 0.88);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+        }
+        .site-header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.3rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- LOGO IMAGE --- */
+        .logo-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: contain;
+            display: block;
+            background: transparent;
+            flex-shrink: 0;
+        }
+
+        /* --- FALLBACK: if logo image fails, show gradient box with TT --- */
+        .logo-icon-fallback {
+            display: none;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+            border-radius: 10px;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #080b12;
+            font-weight: 900;
+            box-shadow: 0 8px 30px rgba(212, 167, 74, 0.25);
+            flex-shrink: 0;
+        }
+
+        /* If logo image is missing, show fallback */
+        .logo-img:not([src]), .logo-img[src=""], .logo-img[src="#"] {
+            display: none;
+        }
+        .logo-img:not([src]) + .logo-icon-fallback,
+        .logo-img[src=""] + .logo-icon-fallback,
+        .logo-img[src="#"] + .logo-icon-fallback {
+            display: flex;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+        .logo-text .main {
+            font-size: 1.15rem;
+            letter-spacing: -0.3px;
+        }
+        .logo-text .main span {
+            color: var(--accent-gold);
+        }
+        .logo-text .sub {
+            font-size: 0.55rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-links a {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            padding: 6px 16px;
+            border-radius: 50px;
+            transition: var(--transition);
+            position: relative;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .nav-links a.cta-nav {
+            background: var(--accent-gold);
+            color: #080b12;
+            font-weight: 600;
+            padding: 8px 22px;
+            box-shadow: 0 4px 20px rgba(212, 167, 74, 0.2);
+        }
+        .nav-links a.cta-nav:hover {
+            background: var(--accent-gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(212, 167, 74, 0.35);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .hamburger span {
+            width: 26px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ============================================================
+                   BACK TO TOP
+                   ============================================================ */
+        #backToTop {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 999;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            color: #080b12;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(212, 167, 74, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+        #backToTop.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        #backToTop:hover {
+            background: var(--accent-gold-light);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(212, 167, 74, 0.4);
+        }
+
+        /* ============================================================
+                   HERO SECTION
+                   ============================================================ */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 60px;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(212, 167, 74, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(61, 143, 217, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(212, 167, 74, 0.1);
+            border: 1px solid rgba(212, 167, 74, 0.15);
+            padding: 4px 18px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 8px;
+        }
+        .hero-content h1 .gold {
+            color: var(--accent-gold);
+        }
+        .hero-content .tagline {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+        .hero-content .typed-wrap {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-gold-light);
+            min-height: 2.8rem;
+            margin-bottom: 20px;
+        }
+        .hero-content .typed-wrap .typed-cursor {
+            color: var(--accent-gold);
+        }
+
+        .hero-content p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 480px;
+            margin-bottom: 32px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: var(--accent-gold);
+            color: #080b12;
+            box-shadow: 0 8px 30px rgba(212, 167, 74, 0.25);
+        }
+        .btn-primary:hover {
+            background: var(--accent-gold-light);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(212, 167, 74, 0.35);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+        .btn-whatsapp {
+            background: #25d366;
+            color: #080b12;
+        }
+        .btn-whatsapp:hover {
+            background: #20bd5a;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.3);
+        }
+        .btn-outline-gold {
+            background: transparent;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+        }
+        .btn-outline-gold:hover {
+            background: rgba(212, 167, 74, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .hero-visual .floating-icons {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            aspect-ratio: 1;
+        }
+        .floating-icons .icon {
+            position: absolute;
+            font-size: 2.8rem;
+            color: rgba(212, 167, 74, 0.15);
+            animation: float 6s ease-in-out infinite;
+        }
+        .floating-icons .icon:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            font-size: 3.6rem;
+            animation-delay: 0s;
+            color: rgba(212, 167, 74, 0.12);
+        }
+        .floating-icons .icon:nth-child(2) {
+            top: 20%;
+            right: 15%;
+            font-size: 2.4rem;
+            animation-delay: 1.2s;
+            color: rgba(61, 143, 217, 0.15);
+        }
+        .floating-icons .icon:nth-child(3) {
+            bottom: 25%;
+            left: 5%;
+            font-size: 3rem;
+            animation-delay: 2.4s;
+            color: rgba(212, 167, 74, 0.1);
+        }
+        .floating-icons .icon:nth-child(4) {
+            bottom: 15%;
+            right: 10%;
+            font-size: 2.8rem;
+            animation-delay: 0.6s;
+            color: rgba(61, 143, 217, 0.12);
+        }
+        .floating-icons .icon:nth-child(5) {
+            top: 45%;
+            left: 45%;
+            font-size: 4.2rem;
+            animation-delay: 1.8s;
+            color: rgba(212, 167, 74, 0.06);
+        }
+        .floating-icons .icon:nth-child(6) {
+            top: 5%;
+            left: 45%;
+            font-size: 2rem;
+            animation-delay: 3s;
+            color: rgba(255, 255, 255, 0.04);
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(4deg);
+            }
+        }
+
+        .hero-visual .glow-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 167, 74, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: bounceDown 2.4s ease-in-out infinite;
+        }
+        .scroll-indicator i {
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+        }
+        @keyframes bounceDown {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(8px);
+            }
+        }
+
+        /* ============================================================
+                   SECTION COMMON
+                   ============================================================ */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 60px;
+        }
+        .section-header .label {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+            background: rgba(212, 167, 74, 0.08);
+            padding: 4px 18px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+        }
+        .section-header h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        .section-header h2 span {
+            color: var(--accent-gold);
+        }
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
+        .section-divider {
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-light));
+            border-radius: 10px;
+            margin: 14px auto 0;
+        }
+
+        .bg-secondary {
+            background: var(--bg-secondary);
+        }
+
+        /* ============================================================
+                   ABOUT US
+                   ============================================================ */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+        .about-text p {
+            color: var(--text-secondary);
+            font-size: 1.02rem;
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+        .about-text p:last-child {
+            margin-bottom: 0;
+        }
+        .about-text .highlight {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+        .value-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 28px 22px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .value-item:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-4px);
+        }
+        .value-item i {
+            font-size: 2rem;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+        }
+        .value-item h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .value-item p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+                   SERVICES
+                   ============================================================ */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 24px 22px;
+            transition: var(--transition);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-blue));
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .service-card:hover {
+            border-color: rgba(212, 167, 74, 0.25);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+        }
+        .service-card:hover::before {
+            opacity: 1;
+        }
+        .service-card .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(212, 167, 74, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            margin-bottom: 14px;
+        }
+        .service-card h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .service-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+                   PROJECTS (Case Studies)
+                   ============================================================ */
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 56px;
+            transition: var(--transition);
+        }
+        .project-card:hover {
+            border-color: rgba(212, 167, 74, 0.2);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+        .project-hero {
+            position: relative;
+            height: 320px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+        }
+        .project-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .project-hero:hover img {
+            transform: scale(1.03);
+        }
+        .project-hero .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 32px 40px 28px;
+            background: linear-gradient(0deg, rgba(8, 11, 18, 0.92) 0%, transparent 100%);
+        }
+        .project-hero .overlay .tag {
+            display: inline-block;
+            background: var(--accent-gold);
+            color: #080b12;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 3px 14px;
+            border-radius: 50px;
+            margin-bottom: 6px;
+        }
+        .project-hero .overlay h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .project-hero .overlay .sub {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .project-body {
+            padding: 36px 40px 40px;
+        }
+        .project-body .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px 48px;
+        }
+        .project-body .full {
+            grid-column: 1 / -1;
+        }
+        .project-body .label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-gold);
+            margin-bottom: 2px;
+        }
+        .project-body .value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .project-body .value.muted {
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        .project-body .desc {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        .project-body .pill-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            margin-top: 4px;
+        }
+        .project-body .pill-group .pill {
+            background: rgba(212, 167, 74, 0.06);
+            border: 1px solid rgba(212, 167, 74, 0.1);
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .project-body .pill-group .pill i {
+            color: var(--accent-gold);
+            margin-right: 6px;
+            font-size: 0.65rem;
+        }
+        .project-body .equipment-badge {
+            background: rgba(61, 143, 217, 0.06);
+            border: 1px solid rgba(61, 143, 217, 0.12);
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .project-body .equipment-badge i {
+            color: var(--accent-blue);
+            margin-right: 6px;
+        }
+        .project-body .results-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 40px;
+            background: rgba(212, 167, 74, 0.03);
+            border: 1px solid rgba(212, 167, 74, 0.06);
+            border-radius: var(--radius-sm);
+            padding: 20px 28px;
+            margin-top: 4px;
+        }
+        .results-row .item {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+        .results-row .item .before {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+        .results-row .item .after {
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .results-row .item .arrow {
+            color: var(--text-muted);
+        }
+        .results-row .item .label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        .outcome-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 20px;
+            margin-top: 8px;
+        }
+        .outcome-list .outcome {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .outcome-list .outcome i {
+            color: var(--accent-gold);
+        }
+
+        /* ============================================================
+                   REPORTS
+                   ============================================================ */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 28px;
+        }
+        .report-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .report-card:hover {
+            border-color: rgba(212, 167, 74, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        .report-card .thumb {
+            height: 160px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+            cursor: pointer;
+        }
+        .report-card .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .report-card .thumb:hover img {
+            transform: scale(1.04);
+        }
+        .report-card .info {
+            padding: 20px 22px 24px;
+        }
+        .report-card .info h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .report-card .info .meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .report-card .info .desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+        }
+        .report-card .info .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-sm {
+            padding: 6px 18px;
+            font-size: 0.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-sm-gold {
+            background: var(--accent-gold);
+            color: #080b12;
+        }
+        .btn-sm-gold:hover {
+            background: var(--accent-gold-light);
+            transform: translateY(-2px);
+        }
+        .btn-sm-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        .btn-sm-outline:hover {
+            border-color: var(--accent-gold);
+            color: var(--text-primary);
+        }
+
+        /* ============================================================
+                   GALLERY (Masonry)
+                   ============================================================ */
+        .gallery-masonry {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .gallery-masonry .g-item {
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            aspect-ratio: 1;
+        }
+        .gallery-masonry .g-item:nth-child(3n+1) {
+            aspect-ratio: 1/1.2;
+        }
+        .gallery-masonry .g-item:nth-child(5n+2) {
+            aspect-ratio: 1.2/1;
+        }
+        .gallery-masonry .g-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .gallery-masonry .g-item:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+        .gallery-masonry .g-item:hover img {
+            transform: scale(1.05);
+        }
+        .gallery-masonry .g-item .overlay-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .gallery-masonry .g-item:hover .overlay-icon {
+            opacity: 1;
+        }
+        .gallery-masonry .g-item .overlay-icon i {
+            color: #fff;
+            font-size: 2.2rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ============================================================
+                   TEAM
+                   ============================================================ */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 32px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .team-member {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 32px 24px 28px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .team-member:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+        }
+        .team-member .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 16px;
+            border: 3px solid var(--accent-gold);
+            background: var(--bg-secondary);
+        }
+        .team-member .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .team-member h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+        .team-member .role {
+            color: var(--accent-gold);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .team-member .bio {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* ============================================================
+                   TESTIMONIALS (Real Reviews)
+                   ============================================================ */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 28px;
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 28px 30px 30px;
+            transition: var(--transition);
+            position: relative;
+        }
+        .testimonial-card:hover {
+            border-color: rgba(212, 167, 74, 0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        .testimonial-card .stars {
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .testimonial-card .quote {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+        .testimonial-card .client {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+        }
+        .testimonial-card .client .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+        }
+        .testimonial-card .client .info {
+            flex: 1;
+        }
+        .testimonial-card .client .info .name {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .testimonial-card .client .info .project {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .testimonial-card .client .info .phone {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* ============================================================
+                   FAQ
+                   ============================================================ */
+        .faq-grid {
+            max-width: 820px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .faq-item:hover {
+            border-color: rgba(212, 167, 74, 0.15);
+        }
+        .faq-item .q {
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            user-select: none;
+        }
+        .faq-item .q:hover {
+            color: var(--accent-gold);
+        }
+        .faq-item .q i {
+            transition: var(--transition);
+            color: var(--accent-gold);
+        }
+        .faq-item .q.active i {
+            transform: rotate(180deg);
+        }
+        .faq-item .a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 24px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        .faq-item .a.open {
+            max-height: 300px;
+            padding: 0 24px 20px;
+        }
+
+        /* ============================================================
+                   CONTACT
+                   ============================================================ */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+        }
+        .contact-info h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .contact-info p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+        .contact-info .item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .contact-info .item .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(212, 167, 74, 0.06);
+            border: 1px solid rgba(212, 167, 74, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-gold);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .contact-info .item .text {
+            font-weight: 500;
+        }
+        .contact-info .item .text .sub {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .contact-social {
+            display: flex;
+            gap: 14px;
+            margin-top: 20px;
+        }
+        .contact-social a {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+        .contact-social a:hover {
+            color: var(--accent-gold);
+            border-color: var(--accent-gold);
+            transform: translateY(-3px);
+        }
+
+        .contact-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 36px 32px;
+        }
+        .contact-form .form-group {
+            margin-bottom: 18px;
+        }
+        .contact-form label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+        }
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: var(--font);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            outline: none;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(212, 167, 74, 0.1);
+        }
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .contact-form .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* ============================================================
+                   TECHNOLOGIES
+                   ============================================================ */
+        .tech-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .tech-grid .tech {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 8px 24px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tech-grid .tech i {
+            color: var(--accent-gold);
+        }
+        .tech-grid .tech:hover {
+            border-color: var(--accent-gold);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+        .tech-note {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 20px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .tech-note i {
+            color: var(--accent-gold);
+        }
+
+        /* ============================================================
+                   FOOTER
+                   ============================================================ */
+        .site-footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 60px 0 32px;
+            position: relative;
+            z-index: 1;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-brand .logo {
+            margin-bottom: 12px;
+        }
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            max-width: 300px;
+        }
+        .footer-col h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+        }
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+        .footer-col ul li a {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        .footer-col ul li a:hover {
+            color: var(--accent-gold);
+        }
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .footer-bottom p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .footer-bottom .tagline {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        /* ============================================================
+                   LIGHTBOX
+                   ============================================================ */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(24px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            animation: fadeIn 0.3s ease;
+        }
+        .lightbox-overlay.active {
+            display: flex;
+        }
+        .lightbox-overlay img {
+            max-width: 92vw;
+            max-height: 86vh;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+            object-fit: contain;
+            animation: scaleIn 0.35s ease;
+        }
+        .lightbox-overlay .close-lb {
+            position: fixed;
+            top: 28px;
+            right: 36px;
+            font-size: 2.6rem;
+            color: #fff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: var(--transition);
+        }
+        .lightbox-overlay .close-lb:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+        .lightbox-overlay .lb-caption {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 28px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            white-space: nowrap;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* ============================================================
+                   RESPONSIVE
+                   ============================================================ */
+        @media (max-width: 1024px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content p {
+                margin: 0 auto 32px;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            .values-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .project-body .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .project-hero {
+                height: 240px;
+            }
+            .project-hero .overlay h3 {
+                font-size: 1.5rem;
+            }
+            .project-body {
+                padding: 28px 24px 32px;
+            }
+            .testimonials-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(8, 11, 18, 0.96);
+                backdrop-filter: blur(18px);
+                padding: 20px 24px 28px;
+                border-bottom: 1px solid var(--border-color);
+                gap: 4px;
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .nav-links a {
+                padding: 10px 16px;
+                width: 100%;
+                border-radius: var(--radius-sm);
+            }
+            .hamburger {
+                display: flex;
+            }
+
+            .hero-content h1 {
+                font-size: 2.6rem;
+            }
+            .hero-content .typed-wrap {
+                font-size: 1.1rem;
+                min-height: 2.2rem;
+            }
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            .values-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .services-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            .team-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .gallery-masonry {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .reports-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .project-hero .overlay {
+                padding: 20px 24px 18px;
+            }
+            .project-hero .overlay h3 {
+                font-size: 1.3rem;
+            }
+            .project-body {
+                padding: 20px 18px 24px;
+            }
+            .project-body .results-row {
+                flex-direction: column;
+                gap: 12px;
+                padding: 16px 20px;
+            }
+            .contact-form {
+                padding: 24px 20px;
+            }
+            .lightbox-overlay .lb-caption {
+                white-space: normal;
+                bottom: 16px;
+                padding: 6px 18px;
+                font-size: 0.75rem;
+                max-width: 90%;
+            }
+            .lightbox-overlay .close-lb {
+                top: 16px;
+                right: 20px;
+                font-size: 2rem;
+            }
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-masonry {
+                grid-template-columns: 1fr 1fr;
+            }
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .contact-social {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+    LOADING SCREEN
+    ============================================================ -->
+    <div id="loader">
+        <div class="loader-ring"></div>
+        <div class="loader-text">THAMAS <span>TECH</span></div>
+    </div>
+
+    <!-- ============================================================
+    PARTICLES CANVAS (background)
+    ============================================================ -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- ============================================================
+    HEADER
+    ============================================================ -->
+    <header class="site-header" id="siteHeader">
+        <div class="container">
+            <a href="#home" class="logo">
+                <!-- ===== YOUR LOGO IMAGE (.png) ===== -->
+                <img src="assets/images/logo/logo.png" alt="THAMAS TECH WORLD Logo" class="logo-img" />
+                <!-- Fallback: if logo image fails, show TT -->
+                <div class="logo-icon-fallback">TT</div>
+
+                <div class="logo-text">
+                    <span class="main">THAMAS <span>TECH</span></span>
+                    <span class="sub">We Do IT Right.</span>
+                </div>
+            </a>
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#reports">Reports</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#testimonials">Reviews</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contact" class="cta-nav">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    BACK TO TOP
+    ============================================================ -->
+    <button id="backToTop" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- ============================================================
+    HERO
+    ============================================================ -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content" data-aos="fade-up" data-aos-duration="800">
+                <div class="badge"><i class="fas fa-check-circle"></i> South Africa · Est. 2026</div>
+                <h1>THAMAS <span class="gold">TECH</span> WORLD</h1>
+                <p class="tagline">Professional WiFi &amp; Networking Solutions</p>
+                <div class="typed-wrap">
+                    <span id="typed-text"></span>
+                </div>
+                <p>Reliable, high-performance wireless networks for homes and businesses. No dead zones. No compromises.</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Get a Quote</a>
+                    <a href="https://wa.me/27678468311" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                    <a href="tel:+27767976653" class="btn btn-secondary"><i class="fas fa-phone"></i> Call Now</a>
+                </div>
+            </div>
+            <div class="hero-visual" data-aos="fade-left" data-aos-duration="800" data-aos-delay="200">
+                <div class="floating-icons">
+                    <div class="icon"><i class="fas fa-wifi"></i></div>
+                    <div class="icon"><i class="fas fa-network-wired"></i></div>
+                    <div class="icon"><i class="fas fa-router"></i></div>
+                    <div class="icon"><i class="fas fa-cloud"></i></div>
+                    <div class="icon"><i class="fas fa-satellite-dish"></i></div>
+                    <div class="icon"><i class="fas fa-signal"></i></div>
+                </div>
+                <div class="glow-ring"></div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    ABOUT US
+    ============================================================ -->
+    <section id="about" class="bg-secondary">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="label">About Us</span>
+                <h2>Who We <span>Are</span></h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-text" data-aos="fade-up">
+                    <p>
+                        <span class="highlight">THAMAS TECH WORLD</span> is a South African technology company
+                        established in <span class="highlight">March 2026</span>. Although we are a growing business,
+                        we are passionate about providing reliable networking solutions for homes and businesses.
+                    </p>
+                    <p>
+                        We specialize in designing, installing, configuring and optimizing wireless networks that
+                        provide <span class="highlight">stable, secure and high-performance</span> internet connectivity.
+                    </p>
+                    <p>
+                        We believe every customer deserves reliable WiFi coverage without dead zones or poor signal
+                        strength. Our goal is to deliver professional workmanship while continuously improving our
+                        knowledge of modern networking technologies.
+                    </p>
+                    <p style="font-weight:600;color:var(--text-primary);">
+                        <i class="fas fa-quote-left" style="color:var(--accent-gold);margin-right:6px;"></i>
+                        Technology should simplify life—not complicate it.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Values -->
+            <div class="values-grid" data-aos="fade-up" data-aos-delay="100">
+                <div class="value-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Reliability</h4>
+                    <p>Networks you can depend on, 24/7.</p>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-rocket"></i>
+                    <h4>Innovation</h4>
+                    <p>Modern solutions for modern needs.</p>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-handshake"></i>
+                    <h4>Integrity</h4>
+                    <p>Honest work, transparent pricing.</p>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-users"></i>
+                    <h4>Customer Focus</h4>
+                    <p>Your satisfaction is our priority.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    SERVICES
+    ============================================================ -->
+    <section id="services">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="label">Our Services</span>
+                <h2>What We <span>Provide</span></h2>
+                <p>Comprehensive networking solutions for every need.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="services-grid">
+                <!-- 30+ services -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="0"><div class="icon"><i class="fas fa-home"></i></div><h4>Home WiFi Installation</h4><p>Full home coverage solutions</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="20"><div class="icon"><i class="fas fa-building"></i></div><h4>Business WiFi Installation</h4><p>Enterprise-grade networking</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="40"><div class="icon"><i class="fas fa-sitemap"></i></div><h4>WiFi Network Design</h4><p>Custom layouts &amp; planning</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="60"><div class="icon"><i class="fas fa-project-diagram"></i></div><h4>Mesh WiFi Installation</h4><p>Seamless whole-home coverage</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="80"><div class="icon"><i class="fas fa-cogs"></i></div><h4>Mesh WiFi Configuration</h4><p>Optimized mesh networks</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100"><div class="icon"><i class="fas fa-router"></i></div><h4>Router Installation</h4><p>Professional router setup</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="120"><div class="icon"><i class="fas fa-sliders-h"></i></div><h4>Router Configuration</h4><p>Advanced router tuning</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="140"><div class="icon"><i class="fas fa-tachometer-alt"></i></div><h4>Router Optimization</h4><p>Maximize performance</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="160"><div class="icon"><i class="fas fa-wifi"></i></div><h4>WiFi Extender Installation</h4><p>Extend your signal</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="180"><div class="icon"><i class="fas fa-sliders-h"></i></div><h4>WiFi Extender Config</h4><p>Seamless integration</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="200"><div class="icon"><i class="fas fa-broadcast-tower"></i></div><h4>Access Point Installation</h4><p>Professional AP deployment</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="220"><div class="icon"><i class="fas fa-cog"></i></div><h4>Access Point Configuration</h4><p>Optimized AP settings</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="240"><div class="icon"><i class="fas fa-chart-line"></i></div><h4>Wireless Network Optimization</h4><p>Peak performance tuning</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="260"><div class="icon"><i class="fas fa-rocket"></i></div><h4>Internet Speed Optimization</h4><p>Get the speed you pay for</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="280"><div class="icon"><i class="fas fa-compress-arrows-alt"></i></div><h4>Bandwidth Optimization</h4><p>Efficient bandwidth usage</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="300"><div class="icon"><i class="fas fa-signal"></i></div><h4>WiFi Coverage Improvement</h4><p>Eliminate dead zones</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="320"><div class="icon"><i class="fas fa-bolt"></i></div><h4>Signal Strength Improvement</h4><p>Stronger, more stable signals</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="340"><div class="icon"><i class="fas fa-times-circle"></i></div><h4>Dead Zone Elimination</h4><p>Complete coverage guaranteed</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="360"><div class="icon"><i class="fas fa-stethoscope"></i></div><h4>Network Diagnostics</h4><p>Identify &amp; fix issues</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="380"><div class="icon"><i class="fas fa-tools"></i></div><h4>Network Troubleshooting</h4><p>Solve complex problems</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="400"><div class="icon"><i class="fas fa-heartbeat"></i></div><h4>Network Health Assessment</h4><p>Comprehensive network check</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="420"><div class="icon"><i class="fas fa-tachometer"></i></div><h4>Speed Testing</h4><p>Verify your speeds</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="440"><div class="icon"><i class="fas fa-map-marked-alt"></i></div><h4>Wireless Site Survey</h4><p>Professional site analysis</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="460"><div class="icon"><i class="fas fa-chart-bar"></i></div><h4>WiFi Performance Analysis</h4><p>Detailed performance reports</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="480"><div class="icon"><i class="fas fa-arrow-up"></i></div><h4>Existing Network Upgrades</h4><p>Modernize your network</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="500"><div class="icon"><i class="fas fa-comments"></i></div><h4>Network Consultation</h4><p>Expert advice &amp; planning</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="520"><div class="icon"><i class="fas fa-sync-alt"></i></div><h4>Network Maintenance</h4><p>Ongoing support &amp; care</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="540"><div class="icon"><i class="fas fa-briefcase"></i></div><h4>Small Business Network Setup</h4><p>Reliable business networks</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="560"><div class="icon"><i class="fas fa-home"></i></div><h4>Home Office Network Setup</h4><p>Work-from-home solutions</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="580"><div class="icon"><i class="fas fa-expand-arrows-alt"></i></div><h4>Network Expansion</h4><p>Grow your network</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="600"><div class="icon"><i class="fas fa-eye"></i></div><h4>Network Monitoring</h4><p>Proactive monitoring</p></div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="620"><div class="icon"><i class="fas fa-file-alt"></i></div><h4>Network Performance Reports</h4><p>Detailed reporting</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    PROJECTS (Case Studies) — THREE PROJECTS
+    ============================================================ -->
+    <section id="projects" class="bg-secondary">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="label">Completed Projects</span>
+                <h2>Case <span>Studies</span></h2>
+                <p>Real networking challenges, solved with expertise.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <!-- CASE 01: Formax 22 -->
+            <div class="project-card" data-aos="fade-up">
+                <div class="project-hero">
+                    <img src="https://picsum.photos/seed/formax22/1200/500" alt="Formax 22 Project" />
+                    <div class="overlay">
+                        <span class="tag"><i class="fas fa-check-circle"></i> Completed</span>
+                        <h3>22 Formax</h3>
+                        <div class="sub">Three-Storey Residential House</div>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <div class="grid-2">
+                        <div>
+                            <div class="label">Overview</div>
+                            <p class="desc">The client experienced poor WiFi coverage and slow internet speeds throughout the property. Our objective was to improve wireless coverage, eliminate dead zones and maximize internet performance across all three floors.</p>
+                        </div>
+                        <div>
+                            <div class="label">Equipment Used</div>
+                            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+                                <span class="equipment-badge"><i class="fas fa-wifi"></i> WiFi Extenders</span>
+                                <span class="equipment-badge"><i class="fas fa-router"></i> Router</span>
+                                <span class="equipment-badge"><i class="fas fa-project-diagram"></i> Mesh WiFi</span>
+                            </div>
+                        </div>
+                        <div class="full">
+                            <div class="label">Services Performed</div>
+                            <div class="pill-group">
+                                <span class="pill"><i class="fas fa-check"></i> Network Assessment</span>
+                                <span class="pill"><i class="fas fa-check"></i> WiFi Installation</span>
+                                <span class="pill"><i class="fas fa-check"></i> Mesh Configuration</span>
+                                <span class="pill"><i class="fas fa-check"></i> Router Configuration</span>
+                                <span class="pill"><i class="fas fa-check"></i> Bandwidth Optimization</span>
+                                <span class="pill"><i class="fas fa-check"></i> Speed Testing</span>
+                                <span class="pill"><i class="fas fa-check"></i> Coverage Testing</span>
+                                <span class="pill"><i class="fas fa-check"></i> Performance Optimization</span>
+                            </div>
+                        </div>
+                        <div class="full">
+                            <div class="label">Results</div>
+                            <div class="results-row">
+                                <div class="item"><span class="label">Speed:</span> <span class="before">10 Mbps</span> <span class="arrow">→</span> <span class="after">100 Mbps</span> <span style="color:var(--accent-gold);font-weight:700;font-size:0.9rem;">10× Faster</span></div>
+                                <div class="item"><span class="label">Coverage:</span> <span class="after">Reliable WiFi across all three floors</span></div>
+                            </div>
+                            <div class="outcome-list">
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Improved Streaming</span>
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Better Online Meetings</span>
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Stable Connectivity</span>
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Reduced Dead Zones</span>
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Improved Roaming</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CASE 02: 21 Sirius -->
+            <div class="project-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="project-hero">
+                    <img src="https://picsum.photos/seed/sirius21/1200/500" alt="21 Sirius Residence Project" />
+                    <div class="overlay">
+                        <span class="tag"><i class="fas fa-check-circle"></i> Completed</span>
+                        <h3>21 Sirius</h3>
+                        <div class="sub">Two-Storey Residential House · Riverbend Garden</div>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <div class="grid-2">
+                        <div>
+                            <div class="label">Overview</div>
+                            <p class="desc">The client required reliable WiFi coverage throughout a two-storey residence. We configured the existing network to create one seamless wireless experience throughout the property using multiple extenders.</p>
+                        </div>
+                        <div>
+                            <div class="label">Equipment Used</div>
+                            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+                                <span class="equipment-badge"><i class="fas fa-router"></i> Router</span>
+                                <span class="equipment-badge"><i class="fas fa-wifi"></i> 7 WiFi Extenders</span>
+                            </div>
+                        </div>
+                        <div class="full">
+                            <div class="label">Services Performed</div>
+                            <div class="pill-group">
+                                <span class="pill"><i class="fas fa-check"></i> Network Assessment</span>
+                                <span class="pill"><i class="fas fa-check"></i> Router Configuration</span>
+                                <span class="pill"><i class="fas fa-check"></i> 7 Extenders Configured</span>
+                                <span class="pill"><i class="fas fa-check"></i> Single SSID Setup</span>
+                                <span class="pill"><i class="fas fa-check"></i> Roaming Optimization</span>
+                                <span class="pill"><i class="fas fa-check"></i> Coverage Optimization</span>
+                                <span class="pill"><i class="fas fa-check"></i> Performance Testing</span>
+                            </div>
+                        </div>
+                        <div class="full">
+                            <div class="label">Outcome</div>
+                            <div class="results-row">
+                                <div class="item"><span class="label">Coverage:</span> <span class="after">Reliable WiFi across both floors</span></div>
+                                <div class="item"><span class="label">Roaming:</span> <span class="after">Seamless between router &amp; extenders</span></div>
+                            </div>
+                            <div class="outcome-list">
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Improved wireless coverage</span>
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Stable connectivity</span>
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Reduced dead zones</span>
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Optimized performance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CASE 03: 29 Regulus -->
+            <div class="project-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="project-hero">
+                    <img src="https://picsum.photos/seed/regulus29/1200/500" alt="29 Regulus Project" />
+                    <div class="overlay">
+                        <span class="tag"><i class="fas fa-check-circle"></i> Completed</span>
+                        <h3>29 Regulus</h3>
+                        <div class="sub">Single-Storey House · Riverbend Garden · 5 rooms + 3 outside</div>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <div class="grid-2">
+                        <div>
+                            <div class="label">Overview</div>
+                            <p class="desc">The client needed WiFi coverage for a single-storey house with 5 internal rooms and 3 external rooms. We installed a robust extender system to ensure seamless connectivity throughout the entire property, including the outdoor areas.</p>
+                        </div>
+                        <div>
+                            <div class="label">Equipment Used</div>
+                            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+                                <span class="equipment-badge"><i class="fas fa-router"></i> Router</span>
+                                <span class="equipment-badge"><i class="fas fa-wifi"></i> WiFi Extenders</span>
+                            </div>
+                        </div>
+                        <div class="full">
+                            <div class="label">Services Performed</div>
+                            <div class="pill-group">
+                                <span class="pill"><i class="fas fa-check"></i> Network Assessment</span>
+                                <span class="pill"><i class="fas fa-check"></i> Extender Installation</span>
+                                <span class="pill"><i class="fas fa-check"></i> SSID Configuration</span>
+                                <span class="pill"><i class="fas fa-check"></i> Roaming Optimization</span>
+                                <span class="pill"><i class="fas fa-check"></i> Speed Testing</span>
+                                <span class="pill"><i class="fas fa-check"></i> Outdoor Coverage Testing</span>
+                            </div>
+                        </div>
+                        <div class="full">
+                            <div class="label">Results</div>
+                            <div class="results-row">
+                                <div class="item"><span class="label">Speed:</span> <span class="before">8 Mbps</span> <span class="arrow">→</span> <span class="after">75 Mbps</span> <span style="color:var(--accent-gold);font-weight:700;font-size:0.9rem;">9× Faster</span></div>
+                                <div class="item"><span class="label">Coverage:</span> <span class="after">Full coverage – inside and outside</span></div>
+                            </div>
+                            <div class="outcome-list">
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Stable WiFi everywhere</span>
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Seamless roaming</span>
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Outdoor coverage achieved</span>
+                                <span class="outcome"><i class="fas fa-check-circle"></i> Dead zones eliminated</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================
+    REPORTS (from assets/images/reports/ — .png)
+    ============================================================ -->
+    <section id="reports">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="label">Technical Documentation</span>
+                <h2>Reports &amp; <span>Analysis</span></h2>
+                <p>Real reports from completed projects — coverage, speed, signal, and more.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="reports-grid">
+                <div class="report-card" data-aos="fade-up">
+                    <div class="thumb" data-src="assets/images/reports/report-coverage.png" data-caption="Coverage Report — 22 Formax">
+                        <img src="assets/images/reports/report-coverage.png" alt="Coverage Report" loading="lazy" />
+                    </div>
+                    <div class="info">
+                        <h4>Coverage Report</h4>
+                        <div class="meta">22 Formax · WiFi Heatmap</div>
+                        <p class="desc">Complete signal strength analysis across all three floors.</p>
+                        <div class="actions">
+                            <button class="btn-sm btn-sm-gold view-report" data-src="assets/images/reports/report-coverage.png" data-caption="Coverage Report — 22 Formax"><i class="fas fa-eye"></i> View</button>
+                            <button class="btn-sm btn-sm-outline"><i class="fas fa-download"></i> Download</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-card" data-aos="fade-up" data-aos-delay="40">
+                    <div class="thumb" data-src="assets/images/reports/report-speed.png" data-caption="Speed Test Report — 10 → 100 Mbps">
+                        <img src="assets/images/reports/report-speed.png" alt="Speed Test Report" loading="lazy" />
+                    </div>
+                    <div class="info">
+                        <h4>Speed Test Report</h4>
+                        <div class="meta">22 Formax · Before &amp; After</div>
+                        <p class="desc">Measured improvement from 10 Mbps to 100 Mbps.</p>
+                        <div class="actions">
+                            <button class="btn-sm btn-sm-gold view-report" data-src="assets/images/reports/report-speed.png" data-caption="Speed Test — 22 Formax"><i class="fas fa-eye"></i> View</button>
+                            <button class="btn-sm btn-sm-outline"><i class="fas fa-download"></i> Download</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-card" data-aos="fade-up" data-aos-delay="80">
+                    <div class="thumb" data-src="assets/images/reports/report-signal.png" data-caption="Signal Report — 21 Sirius">
+                        <img src="assets/images/reports/report-signal.png" alt="Signal Report" loading="lazy" />
+                    </div>
+                    <div class="info">
+                        <h4>Signal &amp; Bandwidth Report</h4>
+                        <div class="meta">21 Sirius · Riverbend Garden</div>
+                        <p class="desc">Signal strength and bandwidth analysis across 2 floors.</p>
+                        <div class="actions">
+                            <button class="btn-sm btn-sm-gold view-report" data-src="assets/images/reports/report-signal.png" data-caption="Signal Report — 21 Sirius"><i class="fas fa-eye"></i> View</button>
+                            <button class="btn-sm btn-sm-outline"><i class="fas fa-download"></i> Download</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-card" data-aos="fade-up" data-aos-delay="120">
+                    <div class="thumb" data-src="assets/images/reports/report-health.png" data-caption="Network Health Report — 29 Regulus">
+                        <img src="assets/images/reports/report-health.png" alt="Network Health" loading="lazy" />
+                    </div>
+                    <div class="info">
+                        <h4>Network Health Report</h4>
+                        <div class="meta">29 Regulus · Extender Analysis</div>
+                        <p class="desc">Comprehensive network health and configuration summary.</p>
+                        <div class="actions">
+                            <button class="btn-sm btn-sm-gold view-report" data-src="assets/images/reports/report-health.png" data-caption="Network Health — 29 Regulus"><i class="fas fa-eye"></i> View</button>
+                            <button class="btn-sm btn-sm-outline"><i class="fas fa-download"></i> Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    GALLERY (from assets/images/gallery/ — .png)
+    ============================================================ -->
+    <section id="gallery" class="bg-secondary">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="label">Photo Gallery</span>
+                <h2>Installation &amp; <span>Configuration</span></h2>
+                <p>Real photos from our completed projects.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="gallery-masonry" data-aos="fade-up">
+                <!-- ===== GALLERY IMAGES 1-8 (.png) ===== -->
+                <div class="g-item" data-src="assets/images/gallery/gallery-1.png" data-caption="Router Installation">
+                    <img src="assets/images/gallery/gallery-1.png" alt="Installation" loading="lazy" />
+                    <div class="overlay-icon"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="g-item" data-src="assets/images/gallery/gallery-2.png" data-caption="WiFi Extender Setup">
+                    <img src="assets/images/gallery/gallery-2.png" alt="Extender" loading="lazy" />
+                    <div class="overlay-icon"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="g-item" data-src="assets/images/gallery/gallery-3.png" data-caption="Coverage Testing">
+                    <img src="assets/images/gallery/gallery-3.png" alt="Coverage Testing" loading="lazy" />
+                    <div class="overlay-icon"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="g-item" data-src="assets/images/gallery/gallery-4.png" data-caption="Configuration Dashboard">
+                    <img src="assets/images/gallery/gallery-4.png" alt="Configuration" loading="lazy" />
+                    <div class="overlay-icon"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="g-item" data-src="assets/images/gallery/gallery-5.png" data-caption="Completed Project — 22 Formax">
+                    <img src="assets/images/gallery/gallery-5.png" alt="Completed" loading="lazy" />
+                    <div class="overlay-icon"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="g-item" data-src="assets/images/gallery/gallery-6.png" data-caption="Mesh Network Setup">
+                    <img src="assets/images/gallery/gallery-6.png" alt="Mesh" loading="lazy" />
+                    <div class="overlay-icon"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="g-item" data-src="assets/images/gallery/gallery-7.png" data-caption="Access Point Installation">
+                    <img src="assets/images/gallery/gallery-7.png" alt="Access Point" loading="lazy" />
+                    <div class="overlay-icon"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="g-item" data-src="assets/images/gallery/gallery-8.png" data-caption="Speed Test Results">
+                    <img src="assets/images/gallery/gallery-8.png" alt="Speed Test" loading="lazy" />
+                    <div class="overlay-icon"><i class="fas fa-search-plus"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    TEAM (from assets/images/team/ — .png)
+    ============================================================ -->
+    <section id="team">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="label">Meet The Team</span>
+                <h2>Our <span>Co-Founders</span></h2>
+                <p>The passionate experts behind THAMAS TECH WORLD.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-member" data-aos="fade-up">
+                    <div class="avatar">
+                        <img src="assets/images/team/kevin-thamaga.png" alt="Kevin Thamaga" />
+                    </div>
+                    <h4>Kevin Thamaga</h4>
+                    <div class="role">Co-Founder</div>
+                    <div class="bio">Networking &amp; ICT Specialist</div>
+                </div>
+                <div class="team-member" data-aos="fade-up" data-aos-delay="60">
+                    <div class="avatar">
+                        <img src="assets/images/team/tebogo-masiteng.png" alt="Tebogo Masiteng" />
+                    </div>
+                    <h4>Tebogo Masiteng</h4>
+                    <div class="role">Co-Founder</div>
+                    <div class="bio">Networking &amp; WiFi Installation Expert</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    TESTIMONIALS (Real Reviews)
+    ============================================================ -->
+    <section id="testimonials" class="bg-secondary">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="label">Customer Reviews</span>
+                <h2>What Our <span>Clients Say</span></h2>
+                <p>Real 5-star feedback from our completed projects.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="testimonials-grid" data-aos="fade-up">
+                <!-- Punki - 29 Regulus -->
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="quote">"I'm so impressed with the service! Our WiFi used to drop constantly, but now we have full coverage everywhere in the house and even outside. The team was professional and efficient. Highly recommend!"</p>
+                    <div class="client">
+                        <div class="avatar">P</div>
+                        <div class="info">
+                            <div class="name">Punki</div>
+                            <div class="project">29 Regulus · Riverbend Garden</div>
+                            <div class="phone"><i class="fas fa-phone"></i> +27 72 586 9486</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Petunia - 21 Sirius -->
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="quote">"Amazing work! They transformed our WiFi experience. No more dead zones, and the speed is incredible. The team was friendly and knowledgeable. Thank you THAMAS TECH WORLD!"</p>
+                    <div class="client">
+                        <div class="avatar">P</div>
+                        <div class="info">
+                            <div class="name">Petunia</div>
+                            <div class="project">21 Sirius · Riverbend Garden</div>
+                            <div class="phone"><i class="fas fa-phone"></i> +27 82 557 1450</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nathi Ndwande - 22 Formax -->
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="quote">"THAMAS TECH WORLD delivered exactly what they promised. Our internet speed increased 10x, and the whole house is covered. Great communication and workmanship. Five stars!"</p>
+                    <div class="client">
+                        <div class="avatar">N</div>
+                        <div class="info">
+                            <div class="name">Nathi Ndwande</div>
+                            <div class="project">22 Formax · Three-Storey House</div>
+                            <div class="phone"><i class="fas fa-phone"></i> +27 76 297 5737</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FAQ
+    ============================================================ -->
+    <section id="faq">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="label">FAQ</span>
+                <h2>Frequently Asked <span>Questions</span></h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="faq-grid" data-aos="fade-up">
+                <div class="faq-item">
+                    <div class="q" onclick="toggleFaq(this)">What areas do you serve? <i class="fas fa-chevron-down"></i></div>
+                    <div class="a">We primarily serve South Africa, with a focus on Gauteng and surrounding areas. Contact us to check availability in your location.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="q" onclick="toggleFaq(this)">How long does a typical installation take? <i class="fas fa-chevron-down"></i></div>
+                    <div class="a">Most residential installations are completed within 1–3 hours, depending on the size of the property and the complexity of the setup.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="q" onclick="toggleFaq(this)">Do you offer support after installation? <i class="fas fa-chevron-down"></i></div>
+                    <div class="a">Yes! We provide ongoing support and maintenance to ensure your network continues to perform optimally.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="q" onclick="toggleFaq(this)">Can you upgrade my existing network? <i class="fas fa-chevron-down"></i></div>
+                    <div class="a">Absolutely. We specialize in upgrading and optimizing existing networks to improve performance and coverage.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    TECHNOLOGIES WE WORK WITH (generic, any brand)
+    ============================================================ -->
+    <section id="technologies" class="bg-secondary">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="label">Technologies</span>
+                <h2>We Work <span>With</span></h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="tech-grid" data-aos="fade-up">
+                <span class="tech"><i class="fas fa-check-circle"></i> WiFi Extenders</span>
+                <span class="tech"><i class="fas fa-check-circle"></i> Mesh WiFi Systems</span>
+                <span class="tech"><i class="fas fa-check-circle"></i> Wireless Routers</span>
+                <span class="tech"><i class="fas fa-check-circle"></i> Access Points</span>
+                <span class="tech"><i class="fas fa-check-circle"></i> Network Analyzers</span>
+                <span class="tech"><i class="fas fa-check-circle"></i> Speed Testing Tools</span>
+                <span class="tech"><i class="fas fa-check-circle"></i> Signal Optimization Tools</span>
+                <span class="tech"><i class="fas fa-check-circle"></i> Coverage Mapping</span>
+            </div>
+            <p class="tech-note"><i class="fas fa-info-circle"></i> We work with any brand — we are vendor-agnostic and choose the best solution for your needs.</p>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    CONTACT
+    ============================================================ -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="label">Contact</span>
+                <h2>Get In <span>Touch</span></h2>
+                <p>Ready to upgrade your network? Reach out to us today.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info" data-aos="fade-right">
+                    <h3>Let's Talk</h3>
+                    <p>We're here to help with all your networking needs. Call, WhatsApp, or email us.</p>
+
+                    <div class="item">
+                        <div class="icon"><i class="fas fa-phone"></i></div>
+                        <div class="text">+27 76 797 6653 <span class="sub">· Call</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="text">067 846 8311 <span class="sub">· WhatsApp</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="icon"><i class="fas fa-envelope"></i></div>
+                        <div class="text">Thamastechworld@gmail.com</div>
+                    </div>
+                    <div class="item">
+                        <div class="icon"><i class="fas fa-clock"></i></div>
+                        <div class="text">Mon–Fri: 8:00 – 17:00 <span class="sub">· Sat: 9:00 – 13:00</span></div>
+                    </div>
+
+                    <div class="contact-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div class="contact-form" data-aos="fade-left">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" placeholder="Your name" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="you@example.com" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" placeholder="Your phone number" />
+                        </div>
+                        <div class="form-group">
+                            <label for="service">Service Interested In</label>
+                            <select id="service">
+                                <option value="">Select a service...</option>
+                                <option value="home-wifi">Home WiFi Installation</option>
+                                <option value="business-wifi">Business WiFi Installation</option>
+                                <option value="mesh-wifi">Mesh WiFi Setup</option>
+                                <option value="router-config">Router Configuration</option>
+                                <option value="network-optimization">Network Optimization</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" placeholder="Tell us about your networking needs..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FOOTER
+    ============================================================ -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <img src="assets/images/logo/logo.png" alt="THAMAS TECH WORLD Logo" class="logo-img" />
+                        <div class="logo-icon-fallback">TT</div>
+                        <div class="logo-text">
+                            <span class="main">THAMAS <span>TECH</span></span>
+                            <span class="sub">We Do IT Right.</span>
+                        </div>
+                    </div>
+                    <p>Professional WiFi &amp; Networking Solutions for homes and businesses across South Africa.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#reports">Reports</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#team">Team</a></li>
+                        <li><a href="#testimonials">Reviews</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="tel:+27767976653"><i class="fas fa-phone" style="color:var(--accent-gold);width:18px;"></i> +27 76 797 6653</a></li>
+                        <li><a href="https://wa.me/27678468311"><i class="fab fa-whatsapp" style="color:#25d366;width:18px;"></i> 067 846 8311</a></li>
+                        <li><a href="mailto:Thamastechworld@gmail.com"><i class="fas fa-envelope" style="color:var(--accent-gold);width:18px;"></i> Thamastechworld@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 <strong>THAMAS TECH WORLD</strong> — All rights reserved.</p>
+                <p class="tagline"><i class="fas fa-wifi"></i> We Do IT Right.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+    LIGHTBOX OVERLAY
+    ============================================================ -->
+    <div class="lightbox-overlay" id="lightboxOverlay">
+        <button class="close-lb" id="closeLb" aria-label="Close lightbox">&times;</button>
+        <img id="lbImage" src="" alt="Full size" />
+        <div class="lb-caption" id="lbCaption">Caption</div>
+    </div>
+
+    <!-- ============================================================
+    SCRIPTS
+    ============================================================ -->
+
+    <!-- AOS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Typed.js -->
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            // LOADING SCREEN
+            // ============================================================
+            window.addEventListener('load', function() {
+                const loader = document.getElementById('loader');
+                setTimeout(function() {
+                    loader.classList.add('hidden');
+                }, 600);
+            });
+
+            // ============================================================
+            // PARTICLES (lightweight canvas)
+            // ============================================================
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            const particles = [];
+            const PARTICLE_COUNT = 80;
+
+            function resizeCanvas() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+                reset() {
+                    this.x = Math.random() * w;
+                    this.y = Math.random() * h;
+                    this.r = Math.random() * 2 + 0.5;
+                    this.dx = (Math.random() - 0.5) * 0.4;
+                    this.dy = (Math.random() - 0.5) * 0.4;
+                    this.opacity = Math.random() * 0.5 + 0.1;
+                }
+                update() {
+                    this.x += this.dx;
+                    this.y += this.dy;
+                    if (this.x < 0 || this.x > w) this.dx *= -1;
+                    if (this.y < 0 || this.y > h) this.dy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(212, 167, 74, ${this.opacity})`;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push(new Particle());
+            }
+
+            function drawLines() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 160) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            const alpha = 1 - dist / 160;
+                            ctx.strokeStyle = `rgba(212, 167, 74, ${alpha * 0.12})`;
+                            ctx.lineWidth = 0.6;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, w, h);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                drawLines();
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+
+            // ============================================================
+            // TYPED.JS
+            // ============================================================
+            new Typed('#typed-text', {
+                strings: [
+                    'WiFi Installation',
+                    'Mesh WiFi',
+                    'Network Optimization',
+                    'Wireless Networking',
+                    'Bandwidth Optimization',
+                    'Router Configuration'
+                ],
+                typeSpeed: 55,
+                backSpeed: 40,
+                backDelay: 2000,
+                loop: true,
+                cursorChar: '|',
+            });
+
+            // ============================================================
+            // AOS
+            // ============================================================
+            AOS.init({
+                duration: 700,
+                once: true,
+                offset: 60,
+            });
+
+            // ============================================================
+            // GSAP (hero floating icons)
+            // ============================================================
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.from('.hero-visual .floating-icons .icon', {
+                duration: 1.2,
+                scale: 0,
+                opacity: 0,
+                stagger: 0.12,
+                ease: 'back.out(1.7)',
+            });
+
+            // ============================================================
+            // FAQ TOGGLE
+            // ============================================================
+            window.toggleFaq = function(el) {
+                const parent = el.closest('.faq-item');
+                const answer = parent.querySelector('.a');
+                const icon = el.querySelector('i');
+                const isOpen = answer.classList.contains('open');
+
+                // Close all others
+                document.querySelectorAll('.faq-item .a').forEach(a => {
+                    if (a !== answer) {
+                        a.classList.remove('open');
+                        a.closest('.faq-item').querySelector('.q i').classList.remove('active');
+                    }
+                });
+
+                if (isOpen) {
+                    answer.classList.remove('open');
+                    icon.classList.remove('active');
+                } else {
+                    answer.classList.add('open');
+                    icon.classList.add('active');
+                }
+            };
+
+            // ============================================================
+            // LIGHTBOX
+            // ============================================================
+            const lbOverlay = document.getElementById('lightboxOverlay');
+            const lbImage = document.getElementById('lbImage');
+            const lbCaption = document.getElementById('lbCaption');
+            const closeLb = document.getElementById('closeLb');
+
+            function openLightbox(src, caption) {
+                lbImage.src = src;
+                lbCaption.textContent = caption || 'Image';
+                lbOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeLightbox() {
+                lbOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Gallery items
+            document.querySelectorAll('.g-item, .thumb, .view-report').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    const src = this.getAttribute('data-src');
+                    const caption = this.getAttribute('data-caption') || 'Image';
+                    if (src) {
+                        e.stopPropagation();
+                        openLightbox(src, caption);
+                    }
+                });
+            });
+
+            // Close lightbox
+            closeLb.addEventListener('click', closeLightbox);
+            lbOverlay.addEventListener('click', function(e) {
+                if (e.target === this) closeLightbox();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeLightbox();
+            });
+
+            // ============================================================
+            // HAMBURGER
+            // ============================================================
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+
+            hamburger.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('open');
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('open');
+                });
+            });
+
+            // ============================================================
+            // STICKY NAV + BACK TO TOP
+            // ============================================================
+            const header = document.getElementById('siteHeader');
+            const backBtn = document.getElementById('backToTop');
+
+            window.addEventListener('scroll', function() {
+                const scrollY = window.scrollY;
+                if (scrollY > 60) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+
+                if (scrollY > 500) {
+                    backBtn.classList.add('visible');
+                } else {
+                    backBtn.classList.remove('visible');
+                }
+            });
+
+            backBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // ============================================================
+            // CONTACT FORM
+            // ============================================================
+            const form = document.getElementById('contactForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const btn = form.querySelector('button[type="submit"]');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                btn.disabled = true;
+
+                // Simulate send
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+                    btn.style.background = '#4ade80';
+                    btn.style.color = '#080b12';
+                    setTimeout(() => {
+                        btn.innerHTML = original;
+                        btn.style.background = '';
+                        btn.style.color = '';
+                        btn.disabled = false;
+                        form.reset();
+                    }, 2000);
+                }, 1500);
+            });
+
+            // ============================================================
+            // ACTIVE NAV LINK (scroll spy)
+            // ============================================================
+            const sections = document.querySelectorAll('section[id]');
+            const navAnchors = document.querySelectorAll('.nav-links a:not(.cta-nav)');
+
+            window.addEventListener('scroll', function() {
+                let current = '';
+                sections.forEach(section => {
+                    const top = section.offsetTop - 120;
+                    if (window.scrollY >= top) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navAnchors.forEach(a => {
+                    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+                });
+            });
+
+        })();
+    </script>
+
+</body>
+</html>
